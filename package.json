@@ -1,0 +1,24 @@
+{
+  "name": "event-app",
+  "version": "1.0.0",
+  "description": "'A simple web app for creating and rsvping events'",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "'events'",
+    "'rsvp'",
+    "'schedule'",
+    "'organize'",
+    "'nodejs'",
+    "'webapp'"
+  ],
+  "author": "'Goodness Ojeaga'",
+  "license": "ISC",
+  "dependencies": {
+    "@handlebars/allow-prototype-access": "^1.0.5",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.0"
+  }
+}
