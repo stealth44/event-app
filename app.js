@@ -3,6 +3,7 @@ const exphbs = require ('express-handlebars')
 const bodyParser = require ('body-parser')
 const Handlebars = require ('handlebars')
 const models = require ('./db/models')
+const methodOverride= require('method-override')
 const {allowInsecurePrototypeAccess} = require ('@handlebars/allow-prototype-access')
 const app = express()
 
@@ -11,6 +12,7 @@ app.engine('handlebars', exphbs({ defaultLayout: 'main', handlebars: allowInsecu
 // Use handlebars to render
 app.set('view engine', 'handlebars')
 app.use(bodyParser.urlencoded({extended: true}))
+app.use(methodOverride('_method'))
 
 
 
@@ -25,7 +27,7 @@ app.post('/events', (req, res)=>{
    })
 })
 
-
+//CREATE
 app.get('/', (req, res)=>{
   models.Event.findAll().then( (events) =>{
     res.render('events-index', { events: events })
@@ -36,6 +38,14 @@ app.get('/', (req, res)=>{
 })
 
 
+//EDIT
+app.get('/events/:id/edit', (req, res)=>{
+    models.Event.findByPk(req.params.id).then((event)=>{
+      res.render('events-edit', {event:event})
+    }).catch((e)=>{
+      console.log(e)
+    })
+})
 
 
 
@@ -45,6 +55,12 @@ app.get('/events/new', (req, res) => {
   res.render('events-new', {});
 })
   
+
+ // INDEX
+ app.get('/events', (req, res) => {
+  res.render('events-index', { events: events });
+})
+
 
 //show
 app.get('/events/:id', (req, res) => {
@@ -58,11 +74,19 @@ app.get('/events/:id', (req, res) => {
   })
 })
 
-  // INDEX
-  app.get('/events', (req, res) => {
-    res.render('events-index', { events: events });
+app.put('/events/:id', (req, res)=>{
+  models.Event.findByPk(req.params.id).then((event)=>{
+    event.update(req.body).then((event)=>{
+    res.render('events-show', {event:event})
+    }).catch((e)=>{
+      console.log(e.message)
+    })
+  }).catch((e)=>{
+    console.log(e.message)
   })
+})
 
+ 
 
 
 
