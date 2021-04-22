@@ -27,9 +27,9 @@ app.post('/events', (req, res)=>{
    })
 })
 
-//CREATE
+//INDEX
 app.get('/', (req, res)=>{
-  models.Event.findAll().then( (events) =>{
+  models.Event.findAll({ order: [['createdAt', 'DESC']] }).then( (events) =>{
     res.render('events-index', { events: events })
   }).catch((e)=>{
     console.log(e)
@@ -56,11 +56,7 @@ app.get('/events/new', (req, res) => {
 })
   
 
- // INDEX
- app.get('/events', (req, res) => {
-  res.render('events-index', { events: events });
-})
-
+ 
 
 //show
 app.get('/events/:id', (req, res) => {
@@ -73,6 +69,9 @@ app.get('/events/:id', (req, res) => {
     console.log(err.message);
   })
 })
+
+
+//UPDATE
 
 app.put('/events/:id', (req, res)=>{
   models.Event.findByPk(req.params.id).then((event)=>{
@@ -87,8 +86,15 @@ app.put('/events/:id', (req, res)=>{
 })
 
  
-
-
+//DELETE
+app.delete('/events/:id', (req, res) => {
+  models.Event.findByPk(req.params.id).then(event => {
+    event.destroy()
+    res.redirect(`/`)
+  }).catch((err) => {
+    console.log(err)
+  })
+})
 
 const port = process.env.PORT || 4000
 app.listen(port, ()=>{
